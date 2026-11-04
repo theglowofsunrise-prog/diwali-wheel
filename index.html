@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Diwali Spin & Play</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Great+Vibes&family=Hind:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: festival night stage — wheel as hero, a slim side column for name / result / winners, diyas framing the page, fireworks layered over everything. Single committed dark look. */
+:root{
+  --night:#1b1035; --night-2:#2a1a4f; --panel:#26184a;
+  --marigold:#f6a821; --saffron:#e8601c; --rose:#d6336c; --clay:#b4532a; --clay-dark:#7a3216;
+  --cream:#fff4dc; --muted:#c9b9e6; --line:rgba(246,168,33,.28);
+  --display:"Yatra One","Hind",Georgia,serif;
+  --body:"Hind",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:dark;
+}
+[hidden]{display:none!important}
+html,body{background:var(--night);color:var(--cream);margin:0}
+img{max-width:100%}
+body{font-family:var(--body);font-size:16px;line-height:1.5;min-height:100vh;
+  background:radial-gradient(1200px 700px at 50% -10%,var(--night-2),var(--night) 70%)}
+.wrap{max-width:1040px;margin:0 auto;padding-block:48px 8px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));position:relative;z-index:1}
+header{display:flex;align-items:center;justify-content:center;gap:clamp(10px,3vw,28px);margin-bottom:6px}
+.titles{text-align:center;display:grid;gap:2px}
+.eyebrow{font-family:"Great Vibes","Brush Script MT",cursive;font-size:clamp(1.7rem,4vw,2.5rem);line-height:1.1;color:var(--marigold);
+  display:flex;align-items:center;justify-content:center;gap:.5em;text-shadow:0 0 14px rgba(246,168,33,.5)}
+.eyebrow span{background:linear-gradient(90deg,#ffd27a,#f6a821 45%,#ff8a3d);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-shadow:none;filter:drop-shadow(0 0 8px rgba(246,168,33,.5));padding:0 .1em}
+.eyebrow::before,.eyebrow::after{content:"";width:clamp(24px,5vw,60px);height:2px;background:linear-gradient(90deg,transparent,var(--marigold))}
+.eyebrow::after{background:linear-gradient(90deg,var(--marigold),transparent)}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(2.1rem,6vw,3.6rem);line-height:1.05;margin:0;text-wrap:balance}
+h1 span{color:var(--marigold)}
+.sub{color:var(--muted);margin:0}
+.toran{height:16px;margin:10px auto 22px;max-width:620px;
+  background:radial-gradient(circle at 7px 4px,var(--marigold) 6px,transparent 7px) 0 0/24px 16px repeat-x,
+             radial-gradient(circle at 19px 9px,var(--saffron) 4px,transparent 5px) 0 0/24px 16px repeat-x}
+
+/* Diya */
+.diya{display:inline-block;width:var(--s,64px);aspect-ratio:1/1}
+.diya svg{width:100%;height:100%;overflow:visible}
+.flame{transform-origin:50% 78%;animation:flick 1.6s ease-in-out infinite}
+.diya:nth-child(2n) .flame{animation-duration:1.25s;animation-delay:-.4s}
+.diya:nth-child(3n) .flame{animation-duration:1.9s;animation-delay:-.9s}
+@keyframes flick{0%,100%{transform:scale(1,1) rotate(-2deg)}30%{transform:scale(.92,1.08) rotate(3deg)}60%{transform:scale(1.05,.94) rotate(-1deg)}}
+.glow{animation:pulse 2.2s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.55}}
+.diya-row{position:relative;z-index:2;margin-top:4px;flex:none;display:flex;justify-content:space-around;align-items:flex-end;
+  padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px));
+  padding-bottom:calc(6px + env(safe-area-inset-bottom,0px));
+  background:linear-gradient(to top,rgba(27,16,53,.95),rgba(27,16,53,0));pointer-events:none;--s:clamp(40px,6vw,70px)}
+@media (max-width:600px){.diya-row .diya:nth-child(n+7){display:none}}
+
+/* Wheel stage */
+.stage{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:32px;align-items:center}
+@media (max-width:780px){.stage{grid-template-columns:1fr}}
+
+.wheel-box{position:relative;width:100%;max-width:520px;margin:0 auto;aspect-ratio:1}
+#wheel{width:100%;height:100%;display:block;border-radius:50%;box-shadow:0 0 0 8px var(--panel),0 0 0 11px var(--marigold),0 0 60px rgba(246,168,33,.35),0 20px 60px rgba(0,0,0,.45)}
+.pointer{position:absolute;left:50%;top:-14px;transform:translateX(-50%);width:0;height:0;
+  border-left:18px solid transparent;border-right:18px solid transparent;border-top:34px solid var(--cream);filter:drop-shadow(0 3px 3px rgba(0,0,0,.4));z-index:2}
+.hub{position:absolute;inset:50% auto auto 50%;transform:translate(-50%,-50%);width:22%;aspect-ratio:1;border-radius:50%;
+  background:var(--night);border:4px solid var(--marigold);color:var(--marigold);font-family:var(--display);font-size:clamp(1rem,3.4vw,1.5rem);cursor:pointer}
+.hub:disabled{cursor:default}
+.side{display:grid;gap:16px;min-width:0}
+.card{background:color-mix(in srgb,var(--panel) 88%,transparent);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:12px;backdrop-filter:blur(4px)}
+h2{font-family:var(--display);font-weight:400;font-size:1.3rem;margin:0;color:var(--marigold)}
+button{font:inherit;cursor:pointer}
+.btn{background:var(--saffron);color:var(--cream);border:0;border-radius:12px;padding:12px 22px;font-weight:700;font-size:1.1rem}
+.btn:hover{filter:brightness(1.08)}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--cream);font-weight:600;font-size:.95rem;padding:9px 16px}
+label{font-size:.85rem;color:var(--muted);font-weight:600;letter-spacing:.04em}
+input,textarea{font:inherit;background:var(--night);color:var(--cream);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%;box-sizing:border-box}
+textarea{min-height:220px;resize:vertical}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--cream);outline-offset:2px}
+.result{text-align:center;min-height:100px;display:grid;place-content:center;gap:2px}
+.result .who{color:var(--muted)}
+.result .prize{font-family:var(--display);font-size:2.1rem;color:var(--marigold);line-height:1.15;text-wrap:balance}
+.log{list-style:none;margin:0;padding:0;display:grid;gap:6px;max-height:210px;overflow:auto}
+.log li{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed var(--line);padding-bottom:5px}
+.log li span:last-child{color:var(--marigold);text-align:right}
+.log small{color:var(--muted)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.hint{font-size:.85rem;color:var(--muted);margin:0}
+
+/* Host settings: hidden behind a small lamp button and a PIN */
+.host-btn{position:fixed;right:max(10px,env(safe-area-inset-right,0px));top:calc(10px + env(safe-area-inset-top,0px));z-index:30;
+  width:34px;height:34px;border-radius:50%;border:1px solid transparent;background:transparent;color:var(--muted);opacity:.25;font-size:1rem}
+.host-btn:hover,.host-btn:focus-visible{opacity:1;border-color:var(--line)}
+.overlay{position:fixed;inset:0;z-index:60;background:rgba(10,5,25,.75);display:grid;place-items:center;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.modal{width:min(460px,100%);background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px;display:grid;gap:14px;max-height:90vh;overflow:auto}
+.modal header{justify-content:space-between;margin:0}
+.switch{display:flex;align-items:center;gap:10px;font-weight:600}
+.switch input{width:auto;accent-color:var(--saffron);transform:scale(1.3)}
+.err{color:#ff8fa8;margin:0;font-size:.9rem}
+
+input[type=range]{padding:0;accent-color:var(--saffron)}
+input[type=file]{font-size:.9rem}
+hr{border:0;border-top:1px dashed var(--line);margin:4px 0;width:100%}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:40;width:100%;height:100%}
+/* Laptop / big screen: everything fits in one screen, the wheel shrinks or grows with the window height */
+@media (min-width:781px){
+  html,body{height:100%;overflow:hidden}
+  body{display:flex;flex-direction:column;min-height:0}
+  .wrap{flex:1 1 auto;min-height:0;width:100%;box-sizing:border-box;display:flex;flex-direction:column;padding-block:clamp(36px,6vh,48px) 4px}
+  header{flex:none}
+  .toran{flex:none;width:100%;margin:clamp(4px,1vh,10px) auto clamp(6px,1.6vh,22px)}
+  h1{font-size:clamp(1.8rem,min(6vw,7.5vh),3.6rem)}
+  .eyebrow{font-size:clamp(1.3rem,min(4vw,4.6vh),2.5rem)}
+  .sub{font-size:clamp(.85rem,2vh,1rem)}
+  .stage{flex:1 1 auto;min-height:0;grid-template-rows:minmax(0,1fr)}
+  .stage>.wheel-box{height:calc(100% - 26px);width:auto;max-width:100%;max-height:520px;align-self:center;justify-self:center;margin:14px auto 12px}
+  .side{max-height:100%;min-height:0;display:flex;flex-direction:column;align-self:center}
+  .side>.card:first-child{flex:none}
+  .side>.card:last-child{flex:0 1 auto;min-height:0;display:flex;flex-direction:column}
+  .side>.card:last-child .log{flex:1 1 auto;min-height:0;max-height:210px}
+  .card{padding:clamp(12px,2vh,18px);gap:clamp(8px,1.4vh,12px)}
+  .result{min-height:clamp(70px,11vh,100px)}
+  .result .prize{font-size:clamp(1.5rem,4vh,2.1rem)}
+  .diya-row{--s:clamp(30px,min(6vw,7.5vh),70px)}
+  header .diya{--s:clamp(38px,min(8vw,10vh),84px)!important}
+}
+</style>
+</head>
+<body>
+
+
+<div id="gate" class="overlay" style="background:var(--night)">
+  <form class="modal" id="gateForm" autocomplete="off" style="text-align:center">
+    <div class="eyebrow"><span>Festival of Lights</span></div>
+    <h2 style="font-size:1.6rem">Host sign-in</h2>
+    <label for="gUser" style="text-align:left">Username</label><input id="gUser" autocomplete="username">
+    <label for="gPass" style="text-align:left">Password</label><input id="gPass" type="password" autocomplete="current-password">
+    <p class="err" id="gErr" hidden>That username or password doesn't match. Check with the event host.</p>
+    <button class="btn" type="submit">Sign in</button>
+  </form>
+</div>
+<script>
+(function(){const H='3bd280886184b924ca5b8c2ee9d8faad3ec22defd1105af6414f70db23b58791',g=document.getElementById('gate');
+  let ok=false;try{ok=sessionStorage.getItem('dw_in')==='1'}catch(e){}
+  if(ok){g.hidden=true;return}
+  document.getElementById('gUser').focus();
+  document.getElementById('gateForm').addEventListener('submit',async e=>{e.preventDefault();
+    const t=document.getElementById('gUser').value.trim().toLowerCase()+':'+document.getElementById('gPass').value;
+    const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));
+    const hex=[...new Uint8Array(d)].map(b=>b.toString(16).padStart(2,'0')).join('');
+    if(hex===H){try{sessionStorage.setItem('dw_in','1')}catch(e){}g.hidden=true}else document.getElementById('gErr').hidden=false});
+})();
+</script>
+<canvas id="fx" aria-hidden="true"></canvas>
+<button class="host-btn" id="hostBtn" title="Host settings" aria-label="Host settings">⚙</button>
+
+<div class="wrap">
+  <header>
+    <span class="diya" style="--s:clamp(48px,8vw,84px)" data-diya></span>
+    <div class="titles">
+      <div class="eyebrow"><span>Festival of Lights</span></div>
+      <h1>Happy <span>Diwali</span>, team</h1>
+      <p class="sub">Step up, spin the wheel and light up your luck.</p>
+    </div>
+    <span class="diya" style="--s:clamp(48px,8vw,84px)" data-diya></span>
+  </header>
+  <div class="toran" aria-hidden="true"></div>
+
+  <section class="stage">
+    <div class="wheel-box">
+      <div class="pointer" aria-hidden="true"></div>
+      <canvas id="wheel" width="1000" height="1000" aria-label="Prize wheel"></canvas>
+      <button class="hub" id="hub" aria-label="Spin the wheel">Spin</button>
+    </div>
+    <div class="side">
+      <div class="card">
+        <label for="name">Colleague name (optional)</label>
+        <input id="name" placeholder="e.g. Priya" autocomplete="off">
+        <button class="btn" id="spinBtn">Spin the wheel</button>
+        <div class="result" aria-live="polite" id="result">
+          <div class="who">Who's feeling lucky?</div>
+          <div class="prize">Shubh Deepavali</div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Lucky winners</h2>
+        <ul class="log" id="log"></ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="diya-row" aria-hidden="true" id="diyaRow"></div>
+
+<!-- Host settings -->
+<div class="overlay" id="overlay" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="hostTitle">
+    <header><h2 id="hostTitle">Host settings</h2><button class="btn ghost" id="closeHost">Close</button></header>
+    <div id="pinStep" class="row" style="display:grid;gap:10px">
+      <label for="pin">Enter host PIN</label>
+      <input id="pin" type="password" inputmode="numeric" autocomplete="off">
+      <p class="err" id="pinErr" hidden>That PIN isn't right. Try again.</p>
+      <button class="btn" id="pinGo">Unlock</button>
+    </div>
+    <div id="hostBody" hidden style="display:grid;gap:14px">
+      <label for="prizes">Prizes, one per line (4 to 12). Saved on this laptop.</label>
+      <textarea id="prizes"></textarea>
+      <div class="row"><button class="btn ghost" id="savePrizes">Update wheel</button><button class="btn ghost" id="resetPrizes">Reset to defaults</button></div>
+      <p class="hint" id="prizeMsg"></p>
+      <label class="switch"><input type="checkbox" id="fxToggle" checked> Fireworks in the background</label>
+      <hr>
+      <label for="spinFile">Wheel spin music (MP3 or other audio file from this laptop)</label>
+      <input type="file" id="spinFile" accept="audio/*">
+      <div class="row"><button class="btn ghost" id="testSpin">Play a 5-second test</button><button class="btn ghost" id="clearSpin">Remove chosen file</button></div>
+      <p class="hint" id="spinMsg"></p>
+      <label for="vol">Spin music volume</label>
+      <input type="range" id="vol" min="0" max="100" value="80">
+      <hr>
+      <div class="row"><button class="btn ghost" id="clearLog">Clear winners list</button><span class="hint" id="clearMsg"></span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const HOST_PIN='2026';
+
+/* ---------- Diyas ---------- */
+const DIYA=`<svg viewBox="0 0 100 100"><defs>
+<radialGradient id="g" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffd27a" stop-opacity=".75"/><stop offset="1" stop-color="#ffd27a" stop-opacity="0"/></radialGradient>
+<linearGradient id="f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff7d6"/><stop offset=".45" stop-color="#ffc23d"/><stop offset="1" stop-color="#e8601c"/></linearGradient>
+<linearGradient id="c" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9643a"/><stop offset="1" stop-color="#7a3216"/></linearGradient></defs>
+<circle class="glow" cx="50" cy="40" r="34" fill="url(#g)"/>
+<path class="flame" d="M50 14 C58 28 62 36 56 46 C53 51 47 51 44 46 C38 36 43 27 50 14Z" fill="url(#f)"/>
+<path d="M50 34 C53 40 53 44 50 47 C47 44 47 40 50 34Z" fill="#fff"/>
+<path d="M10 56 Q50 50 90 56 Q86 80 50 84 Q14 80 10 56Z" fill="url(#c)"/>
+<path d="M10 56 Q50 50 90 56 Q50 64 10 56Z" fill="#e8a24a"/>
+<path d="M22 66 Q50 74 78 66" stroke="#f6a821" stroke-width="2.5" fill="none" stroke-dasharray="2 5" stroke-linecap="round"/>
+<path d="M88 55 L98 50 L92 58Z" fill="#7a3216"/></svg>`;
+document.querySelectorAll('[data-diya]').forEach(d=>d.innerHTML=DIYA);
+document.getElementById('diyaRow').innerHTML=Array.from({length:11},()=>`<span class="diya">${DIYA}</span>`).join('');
+
+/* ---------- Wheel ---------- */
+const DEFAULTS=["Box of mithai","Coffee on us","Diya keepsake","Chocolate treat","Team shout-out","Spin again","Gift voucher","Sparkler pack","Mystery prize","Better luck next time"];
+const COLORS=['#f6a821','#e8601c','#d6336c','#7b3fb8','#2f9e6e','#c2185b','#f0c419','#3b5bdb'];
+let prizes=JSON.parse(store.get('dw_prizes')||'null')||DEFAULTS.slice();
+let angle=0,spinning=false;
+const cv=document.getElementById('wheel'),ctx=cv.getContext('2d');
+function wrapText(t,maxW){const words=t.split(' '),lines=[];let cur='';
+  for(const w of words){const test=cur?cur+' '+w:w;if(ctx.measureText(test).width>maxW&&cur){lines.push(cur);cur=w}else cur=test}
+  if(cur)lines.push(cur);return lines.slice(0,3)}
+function draw(){const n=prizes.length,R=cv.width/2,seg=2*Math.PI/n;
+  ctx.clearRect(0,0,cv.width,cv.height);ctx.save();ctx.translate(R,R);ctx.rotate(angle);
+  for(let i=0;i<n;i++){const col=COLORS[i%COLORS.length];
+    ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,R,i*seg,(i+1)*seg);ctx.closePath();ctx.fillStyle=col;ctx.fill();
+    ctx.strokeStyle='rgba(255,244,220,.55)';ctx.lineWidth=3;ctx.stroke();
+    ctx.save();ctx.rotate(i*seg+seg/2);ctx.textAlign='right';ctx.textBaseline='middle';
+    ctx.fillStyle=['#f6a821','#f0c419'].includes(col)?'#1b1035':'#fff4dc';
+    const fs=n>8?32:38;ctx.font=`600 ${fs}px Hind, sans-serif`;
+    const lines=wrapText(prizes[i],R*0.55);
+    lines.forEach((l,j)=>ctx.fillText(l,R-38,(j-(lines.length-1)/2)*(fs+2)));ctx.restore();
+    ctx.save();ctx.rotate(i*seg);ctx.beginPath();ctx.arc(R-15,0,8,0,7);ctx.fillStyle='#fff4dc';ctx.fill();ctx.restore();}
+  ctx.restore();}
+function pickIndex(){const n=prizes.length,seg=2*Math.PI/n;
+  const a=((-Math.PI/2-angle)%(2*Math.PI)+4*Math.PI)%(2*Math.PI);return Math.floor(a/seg)%n}
+function setBtns(d){document.getElementById('spinBtn').disabled=d;document.getElementById('hub').disabled=d}
+function spin(){if(spinning)return;spinning=true;setBtns(true);spinMusicStart();
+  const n=prizes.length,seg=2*Math.PI/n,target=Math.floor(Math.random()*n),jitter=(Math.random()-.5)*seg*.7;
+  let final=-Math.PI/2-(target*seg+seg/2)-jitter;const turns=reduce?1:6+Math.floor(Math.random()*3);
+  while(final<angle+turns*2*Math.PI)final+=2*Math.PI;
+  const start=angle,dist=final-start,dur=reduce?600:5200,t0=performance.now(),ease=t=>1-Math.pow(1-t,4);
+  (function frame(now){const t=Math.min(1,(now-t0)/dur);angle=start+dist*ease(t);draw();
+    if(t<1)requestAnimationFrame(frame);else{angle%=2*Math.PI;finish(pickIndex())}})(t0)}
+let log=JSON.parse(store.get('dw_log')||'[]');
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function finish(i){spinning=false;setBtns(false);spinMusicStop();const p=prizes[i],nm=document.getElementById('name').value.trim();
+  const lose=/better luck|try again/i.test(p);
+  document.getElementById('result').innerHTML=`<div class="who">${nm?esc(nm)+(lose?'…':' wins'):(lose?'So close':'You win')}</div><div class="prize">${esc(p)}</div>`;
+  if(!lose)celebrate();
+  log.unshift({n:nm||'Colleague',p,t:new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})});log=log.slice(0,60);
+  store.set('dw_log',JSON.stringify(log));renderLog();document.getElementById('name').value=''}
+function renderLog(){document.getElementById('log').innerHTML=log.length?log.map(r=>`<li><span>${esc(r.n)} <small>${r.t}</small></span><span>${esc(r.p)}</span></li>`).join(''):'<li><span>No spins yet. Be the first!</span><span></span></li>'}
+document.getElementById('spinBtn').onclick=spin;document.getElementById('hub').onclick=spin;
+document.fonts?.ready.then(draw);draw();renderLog();
+
+/* ---------- Host settings ---------- */
+const ov=document.getElementById('overlay'),ta=document.getElementById('prizes');
+let unlocked=false;
+function openHost(){ov.hidden=false;document.getElementById('pinStep').hidden=unlocked;document.getElementById('hostBody').hidden=!unlocked;
+  document.getElementById('pinErr').hidden=true;ta.value=prizes.join('\n');document.getElementById('prizeMsg').textContent='';document.getElementById('clearMsg').textContent='';
+  setTimeout(()=>(unlocked?ta:document.getElementById('pin')).focus(),30)}
+function closeHost(){ov.hidden=true;unlocked=false;document.getElementById('pin').value=''}
+document.getElementById('hostBtn').onclick=openHost;document.getElementById('closeHost').onclick=closeHost;
+ov.addEventListener('click',e=>{if(e.target===ov)closeHost()});
+addEventListener('keydown',e=>{if(e.key==='Escape'&&!ov.hidden)closeHost()});
+function tryPin(){if(document.getElementById('pin').value===HOST_PIN){unlocked=true;openHost()}else document.getElementById('pinErr').hidden=false}
+document.getElementById('pinGo').onclick=tryPin;document.getElementById('pin').addEventListener('keydown',e=>{if(e.key==='Enter')tryPin()});
+document.getElementById('savePrizes').onclick=()=>{const list=ta.value.split('\n').map(s=>s.trim()).filter(Boolean),msg=document.getElementById('prizeMsg');
+  if(list.length<4||list.length>12){msg.textContent=`You have ${list.length} prizes. Use between 4 and 12 so the slices stay readable.`;return}
+  prizes=list;store.set('dw_prizes',JSON.stringify(prizes));draw();msg.textContent='Wheel updated.'};
+document.getElementById('resetPrizes').onclick=()=>{prizes=DEFAULTS.slice();ta.value=prizes.join('\n');store.set('dw_prizes',JSON.stringify(prizes));draw();document.getElementById('prizeMsg').textContent='Back to the default prizes.'};
+document.getElementById('clearLog').onclick=()=>{log=[];store.set('dw_log','[]');renderLog();document.getElementById('clearMsg').textContent='Winners list cleared.'};
+const fxT=document.getElementById('fxToggle');let ambient=store.get('dw_fx')!=='off';fxT.checked=ambient;
+fxT.onchange=()=>{ambient=fxT.checked;store.set('dw_fx',ambient?'on':'off')};
+
+/* ---------- Fireworks: rockets, anar (flower pots), chakri, phuljhari ---------- */
+const fx=document.getElementById('fx'),g=fx.getContext('2d');let W,H,DPR;
+function size(){DPR=Math.min(2,devicePixelRatio||1);W=innerWidth;H=innerHeight;fx.width=W*DPR;fx.height=H*DPR;g.setTransform(DPR,0,0,DPR,0,0)}
+addEventListener('resize',size);size();
+const PAL=[['#ffd27a','#fff4dc'],['#ff6b3d','#ffd27a'],['#ff4f8b','#ffc0d6'],['#7cf0b0','#e6fff2'],['#8fb3ff','#ffffff'],['#c78bff','#ffe1ff'],['#f6a821','#e8601c']];
+let P=[],E=[],R=[];const MAXP=3200;let FL=[];
+const rnd=(a,b)=>a+Math.random()*(b-a),pick=a=>a[Math.floor(Math.random()*a.length)];
+function spark(x,y,vx,vy,c,life,o={}){if(P.length>=MAXP)return;P.push({x,y,px:x,py:y,vx,vy,c,life,max:life,g:o.g??.05,drag:o.drag??.985,w:o.w??2,tw:o.tw?1:0,trail:o.trail||0,strobe:o.strobe||0,split:o.split||null})}
+function ground(){const r=document.getElementById('diyaRow').getBoundingClientRect();return Math.max(H*.45,Math.min(H-8,r.top+r.height*.35))}
+function sideX(){return Math.random()<.5?rnd(W*.03,W*.13):rnd(W*.87,W*.97)}
+const SHELLS=['peony','peony','chrys','ring','willow','crackle','palm','crossette','strobe','heart','double'];
+const sc=()=>Math.max(.75,Math.min(1.6,Math.min(W,H)/650));
+/* where shells burst: the top band, or high up on the left/right edges */
+function skyTarget(){const r=Math.random();
+  if(r<.5)return{x:rnd(W*.06,W*.94),y:rnd(H*.06,H*.26)};
+  if(r<.75)return{x:rnd(W*.02,W*.16),y:rnd(H*.1,H*.5)};
+  return{x:rnd(W*.84,W*.98),y:rnd(H*.1,H*.5)}}
+function rocket(x,ty,type){const tg=skyTarget();if(x!=null)tg.x=x;if(ty!=null)tg.y=ty;
+  const sx=Math.max(4,Math.min(W-4,tg.x+rnd(-W*.04,W*.04))),sy=ground(),h=Math.max(60,sy-tg.y);
+  const vy=-Math.sqrt(2*.12*h),frames=-vy/.12;
+  R.push({x:sx,y:sy,vx:(tg.x-sx)/frames,vy,c:pick(PAL),type:type||pick(SHELLS)})}
+function flash(x,y,c,r){FL.push({x,y,c,r,life:14})}
+function explode(r){const [c1,c2]=r.c,k=sc(),T=r.type,x=r.x,y=r.y;flash(x,y,c1,90*k);
+  const burst=(n,sp,life,o,col)=>{for(let i=0;i<n;i++){const a=o.even?i/n*Math.PI*2:rnd(0,Math.PI*2),s=(o.even?sp:rnd(sp*.25,sp))*k;
+    spark(x,y,Math.cos(a)*s,Math.sin(a)*s,col?col(i):(Math.random()<.7?c1:c2),rnd(life*.8,life*1.2),o)}};
+  if(T==='peony')burst(130,5.5,75,{g:.045,drag:.982,w:2.2,tw:Math.random()<.3});
+  else if(T==='chrys')burst(170,6,95,{g:.04,drag:.984,w:1.8,trail:1});
+  else if(T==='ring'){burst(80,4.4,70,{even:1,g:.035,drag:.982,w:2.4});burst(40,1.6,60,{g:.03,drag:.98,w:2},()=>c2)}
+  else if(T==='double'){const o=pick(PAL);burst(90,6,80,{even:1,g:.04,drag:.982,w:2.2});burst(70,3,75,{even:1,g:.04,drag:.982,w:2.2},()=>o[0])}
+  else if(T==='willow')burst(120,3.6,150,{g:.03,drag:.976,w:2,trail:1},()=>pick(['#ffcf6b','#ffb347','#fff1c4']));
+  else if(T==='palm')for(let i=0;i<9;i++){const a=i/9*Math.PI*2+rnd(-.1,.1);for(let j=0;j<14;j++){const s=(3+j*.28)*k;
+      spark(x,y,Math.cos(a)*s,Math.sin(a)*s,j<3?'#fff4dc':c1,rnd(85,110),{g:.05,drag:.98,w:2.6})}}
+  else if(T==='crackle'){burst(110,5,70,{g:.045,drag:.982,w:2,tw:1});
+    setTimeout(()=>{for(let i=0;i<70;i++)spark(x+rnd(-130,130)*k,y+rnd(-90,120)*k,rnd(-1,1),rnd(-1,1),'#fff',rnd(10,22),{g:0,w:2.6,tw:1})},550)}
+  else if(T==='crossette'){for(let i=0;i<12;i++){const a=i/12*Math.PI*2,s=4.2*k;spark(x,y,Math.cos(a)*s,Math.sin(a)*s,c1,38,{g:.03,drag:.985,w:2.6,split:c2})}}
+  else if(T==='strobe')burst(140,5.2,110,{g:.03,drag:.98,w:2.8,strobe:1},()=>Math.random()<.6?'#ffffff':c2);
+  else if(T==='heart')for(let i=0;i<90;i++){const t=i/90*Math.PI*2,hx=16*Math.pow(Math.sin(t),3),hy=-(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t));
+      spark(x,y,hx*.28*k,hy*.28*k,pick(['#ff4f8b','#ff8fb3','#ffd0e0']),rnd(70,85),{g:.02,drag:.975,w:2.4})}
+}
+/* Sydney-style barrage: a row of shells bursting one after another across the sky, plus fans from the side towers */
+function barrage(){const n=7+Math.floor(Math.random()*5),T=pick(SHELLS),ltr=Math.random()<.5,y=rnd(H*.08,H*.2);
+  for(let i=0;i<n;i++)setTimeout(()=>{const f=(i+.5)/n;rocket(W*(ltr?f:1-f),y+rnd(-H*.03,H*.03),Math.random()<.6?T:undefined)},i*170);
+  setTimeout(()=>{fan(W*.04,1);fan(W*.96,-1)},300)}
+function sideShow(){const left=Math.random()<.5,x0=left?rnd(W*.04,W*.12):rnd(W*.88,W*.96);
+  for(let i=0;i<4;i++)setTimeout(()=>rocket(x0+rnd(-W*.03,W*.03),rnd(H*.1,H*.45)),i*260)}
+/* comets fanned out from the screen edges */
+function fan(x,dir){const c=pick(PAL);for(let i=0;i<7;i++)setTimeout(()=>{const a=-Math.PI/2+dir*(i/6)*.9,s=rnd(9,11)*Math.sqrt(H/700);
+  R.push({x,y:ground(),vx:Math.cos(a)*s*.55,vy:Math.sin(a)*s,c,type:'comet'})},i*70)}
+function anar(x){E.push({kind:'anar',x:x??sideX(),y:ground(),t:0,dur:rnd(180,260)})}
+function chakri(x){E.push({kind:'chakri',x:x??sideX(),y:ground()-rnd(10,40),t:0,dur:rnd(160,220),a:0})}
+function phuljhari(){const x=rnd(W*.1,W*.9),y=rnd(H*.25,H*.75);E.push({kind:'phul',x,y,ox:x,oy:y,t:0,dur:rnd(150,230),r:rnd(20,60)})}
+function runEmitters(){E=E.filter(e=>{e.t++;const k=e.t/e.dur;
+  if(e.kind==='anar'){const pw=Math.sin(Math.min(1,k)*Math.PI);
+    for(let i=0;i<10*pw+2;i++){const a=-Math.PI/2+rnd(-.32,.32),s=rnd(4,9)*pw+1.5;spark(e.x,e.y,Math.cos(a)*s,Math.sin(a)*s,pick(['#fff4dc','#ffd27a','#ffb347','#ffffff']),rnd(30,60),{g:.13,drag:.99,w:1.8,tw:Math.random()<.3?1:0})}
+    g.fillStyle='#7a3216';g.beginPath();g.moveTo(e.x-12,e.y+6);g.lineTo(e.x+12,e.y+6);g.lineTo(e.x+5,e.y-10);g.lineTo(e.x-5,e.y-10);g.fill()}
+  else if(e.kind==='chakri'){e.a+=.45;for(let j=0;j<3;j++){const a=e.a+j*2.09;
+      spark(e.x+Math.cos(a)*8,e.y+Math.sin(a)*8,Math.cos(a+1.4)*rnd(3,5),Math.sin(a+1.4)*rnd(3,5),pick(['#ffd27a','#fff','#7cf0b0','#ff6b3d']),rnd(18,30),{g:.08,drag:.95,w:1.8})}}
+  else{e.x=e.ox+Math.cos(e.t*.05)*e.r;e.y=e.oy+Math.sin(e.t*.08)*e.r*.5;
+    for(let i=0;i<7;i++){const a=rnd(0,Math.PI*2),s=rnd(1.5,4.5);spark(e.x,e.y,Math.cos(a)*s,Math.sin(a)*s,Math.random()<.8?'#fffbe8':'#ffd27a',rnd(6,16),{g:.02,drag:.9,w:1.4,tw:1})}
+    g.fillStyle='rgba(255,250,220,.9)';g.beginPath();g.arc(e.x,e.y,3,0,7);g.fill()}
+  return e.t<e.dur})}
+let next=performance.now()+800,nextBig=performance.now()+5000;
+function schedule(now){if(!ambient||reduce||document.hidden)return;
+  if(now>=nextBig){Math.random()<.6?barrage():sideShow();nextBig=now+rnd(9000,16000)}
+  if(now<next)return;
+  const r=Math.random();if(r<.62){rocket();if(Math.random()<.45)setTimeout(()=>rocket(),rnd(150,400))}
+  else if(r<.76)anar();else if(r<.88)chakri();else phuljhari();
+  next=now+rnd(500,1300)}
+function loop(now){g.clearRect(0,0,W,H);g.globalCompositeOperation='lighter';schedule(now);
+  R=R.filter(r=>{r.x+=r.vx;r.y+=r.vy;r.vy+=.12;g.fillStyle=r.c[1];g.beginPath();g.arc(r.x,r.y,2.4,0,7);g.fill();
+    spark(r.x,r.y+4,rnd(-.4,.4),rnd(.5,1.5),'#ffb347',rnd(12,22),{g:.02,w:1.4});
+    if(r.vy>=-.5){if(r.type!=='comet')explode(r);else for(let i=0;i<24;i++)spark(r.x,r.y,rnd(-2,2),rnd(-2,1),r.c[0],rnd(25,45),{g:.05,w:1.8,tw:1});return false}return true});
+  runEmitters();
+  FL=FL.filter(f=>{const gr=g.createRadialGradient(f.x,f.y,0,f.x,f.y,f.r);gr.addColorStop(0,f.c);gr.addColorStop(1,'rgba(0,0,0,0)');
+    g.globalAlpha=f.life/14*.35;g.fillStyle=gr;g.beginPath();g.arc(f.x,f.y,f.r,0,7);g.fill();return --f.life>0});
+  const born=[];
+  for(const p of P){p.px=p.x;p.py=p.y;p.vx*=p.drag;p.vy=p.vy*p.drag+p.g;p.x+=p.vx;p.y+=p.vy;p.life--;
+    if(p.trail&&p.life%3===0&&born.length<300)born.push({x:p.x,y:p.y,px:p.x,py:p.y,vx:0,vy:.3,c:p.c,life:14,max:14,g:.02,drag:.95,w:1.2,tw:0});
+    if(p.split&&p.life===0)for(let j=0;j<4;j++){const a=j*Math.PI/2+Math.PI/4,s=2.4;born.push({x:p.x,y:p.y,px:p.x,py:p.y,vx:p.vx+Math.cos(a)*s,vy:p.vy+Math.sin(a)*s,c:p.split,life:40,max:40,g:.04,drag:.975,w:2,tw:1})}
+    let a=Math.max(0,p.life/p.max);if(p.tw)a*=Math.random()<.5?1:.2;if(p.strobe&&p.life<p.max*.6)a*=(p.life>>2)%2?1:0;
+    g.globalAlpha=a;g.strokeStyle=p.c;g.lineWidth=p.w;g.beginPath();g.moveTo(p.px,p.py);g.lineTo(p.x,p.y);g.stroke()}
+  g.globalAlpha=1;g.globalCompositeOperation='source-over';P=P.filter(p=>p.life>0);for(const b of born)if(P.length<MAXP)P.push(b);
+  requestAnimationFrame(loop)}
+requestAnimationFrame(loop);
+function celebrate(){if(reduce)return;barrage();for(let i=0;i<4;i++)setTimeout(()=>rocket(i%2?rnd(W*.84,W*.98):rnd(W*.02,W*.16)),600+i*200);anar(W*.06);anar(W*.94);chakri(W*.11);chakri(W*.89)}
+
+/* ---------- Wheel spin music: plays only while the wheel turns ---------- */
+/* A file named spin.mp3 in the app folder is injected here by app.py; a file chosen in Host settings overrides it. */
+let SPIN_DEFAULT=null;
+let vol=+(store.get('dw_spinvol')??80),spinAudio=null,spinName='',fadeT=null;
+function setSpinSource(src,name){if(spinAudio){spinAudio.pause()}spinAudio=src?new Audio(src):null;spinName=name||'';
+  if(spinAudio){spinAudio.loop=true;spinAudio.preload='auto';spinAudio.volume=vol/100}showSpinMsg()}
+function showSpinMsg(){document.getElementById('spinMsg').textContent=spinAudio?'Spin music: '+spinName+'. It plays from the start each spin and fades out as the wheel stops.':'No spin music yet. Choose a file above, or add spin.mp3 to the app on GitHub.'}
+function spinMusicStart(){if(!spinAudio)return;clearInterval(fadeT);spinAudio.volume=vol/100;try{spinAudio.currentTime=0}catch(e){}spinAudio.play().catch(()=>{})}
+function spinMusicStop(fadeMs=900){if(!spinAudio)return;clearInterval(fadeT);const a=spinAudio,v0=a.volume,steps=18;let k=0;
+  fadeT=setInterval(()=>{k++;a.volume=Math.max(0,v0*(1-k/steps));if(k>=steps){clearInterval(fadeT);a.pause();a.volume=vol/100}},fadeMs/steps)}
+/* remember a host-chosen file on this laptop */
+function idb(){return new Promise((res,rej)=>{try{const r=indexedDB.open('diwali-spin',1);r.onupgradeneeded=()=>r.result.createObjectStore('f');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}catch(e){rej(e)}})}
+async function idbPut(v){const db=await idb();return new Promise(r=>{const t=db.transaction('f','readwrite');v?t.objectStore('f').put(v,'spin'):t.objectStore('f').delete('spin');t.oncomplete=()=>r(true);t.onerror=()=>r(false)})}
+async function idbGet(){const db=await idb();return new Promise(r=>{const q=db.transaction('f').objectStore('f').get('spin');q.onsuccess=()=>r(q.result||null);q.onerror=()=>r(null)})}
+let localURL=null;
+function useLocal(blob,name){if(localURL)URL.revokeObjectURL(localURL);localURL=URL.createObjectURL(blob);setSpinSource(localURL,name+' (chosen on this laptop)')}
+function useDefault(){if(SPIN_DEFAULT)setSpinSource(SPIN_DEFAULT.src,SPIN_DEFAULT.name);else setSpinSource(null)}
+document.getElementById('spinFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;useLocal(f,f.name);
+  let ok=false;try{ok=await idbPut({blob:f,name:f.name})}catch(err){}
+  if(!ok)document.getElementById('spinMsg').textContent='Spin music: '+f.name+'. This browser could not save it, so choose it again after a reload.'};
+document.getElementById('clearSpin').onclick=async()=>{document.getElementById('spinFile').value='';try{await idbPut(null)}catch(e){}if(localURL){URL.revokeObjectURL(localURL);localURL=null}useDefault()};
+document.getElementById('testSpin').onclick=()=>{if(!spinAudio){showSpinMsg();return}spinMusicStart();setTimeout(()=>spinMusicStop(),5000)};
+const volEl=document.getElementById('vol');volEl.value=vol;
+volEl.oninput=()=>{vol=+volEl.value;store.set('dw_spinvol',vol);if(spinAudio)spinAudio.volume=vol/100};
+useDefault();idbGet().then(v=>{if(v&&v.blob)useLocal(v.blob,v.name)}).catch(()=>{});
+/* Use spin.mp3 (or .m4a/.wav/.ogg) saved in the same folder as this page; works online and when opened as a file */
+(function(){const list=['spin.mp3','spin.m4a','spin.wav','spin.ogg'];let k=0;
+  (function tryNext(){if(k>=list.length)return;const f=list[k++],a=new Audio();
+    a.addEventListener('loadedmetadata',()=>{SPIN_DEFAULT={name:f,src:f};if(!localURL)useDefault()},{once:true});
+    a.addEventListener('error',tryNext,{once:true});a.preload='metadata';a.src=f})()})();
+</script>
+
+</body>
+</html>
