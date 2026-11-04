@@ -242,9 +242,9 @@ document.querySelectorAll('[data-diya]').forEach(d=>d.innerHTML=DIYA);
 document.getElementById('diyaRow').innerHTML=Array.from({length:11},()=>`<span class="diya">${DIYA}</span>`).join('');
 
 /* ---------- Wheel ---------- */
-const DEFAULTS=["Box of mithai","Coffee on us","Diya keepsake","Chocolate treat","Team shout-out","Spin again","Gift voucher","Sparkler pack","Mystery prize","Better luck next time"];
-const COLORS=['#f6a821','#e8601c','#d6336c','#7b3fb8','#2f9e6e','#c2185b','#f0c419','#3b5bdb'];
-let prizes=JSON.parse(store.get('dw_prizes')||'null')||DEFAULTS.slice();
+const DEFAULTS=["The Mithai Challenge", "Surprise Gift", "Charades", "The Diwali Super Over", "Freeze", "Spin Again", "Pass The Spin", "Mic Check", "Diwali Groove"];
+const COLORS=['#f6a821','#e8601c','#d6336c','#7b3fb8','#2f9e6e','#c2185b','#f0c419','#3b5bdb','#0e9aa7','#8a4b2a'];
+let prizes=JSON.parse(store.get('dw_prizes_v2')||'null')||DEFAULTS.slice();
 let angle=0,spinning=false;
 const cv=document.getElementById('wheel'),ctx=cv.getContext('2d');
 function wrapText(t,maxW){const words=t.split(' '),lines=[];let cur='';
@@ -276,7 +276,7 @@ let log=JSON.parse(store.get('dw_log')||'[]');
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function finish(i){spinning=false;setBtns(false);spinMusicStop();const p=prizes[i],nm=document.getElementById('name').value.trim();
   const lose=/better luck|try again/i.test(p);
-  document.getElementById('result').innerHTML=`<div class="who">${nm?esc(nm)+(lose?'…':' wins'):(lose?'So close':'You win')}</div><div class="prize">${esc(p)}</div>`;
+  document.getElementById('result').innerHTML=`<div class="who">${nm?esc(nm)+(lose?'…':' gets'):(lose?'So close':'The wheel says')}</div><div class="prize">${esc(p)}</div>`;
   if(!lose)celebrate();
   log.unshift({n:nm||'Colleague',p,t:new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})});log=log.slice(0,60);
   store.set('dw_log',JSON.stringify(log));renderLog();document.getElementById('name').value=''}
@@ -298,8 +298,8 @@ function tryPin(){if(document.getElementById('pin').value===HOST_PIN){unlocked=t
 document.getElementById('pinGo').onclick=tryPin;document.getElementById('pin').addEventListener('keydown',e=>{if(e.key==='Enter')tryPin()});
 document.getElementById('savePrizes').onclick=()=>{const list=ta.value.split('\n').map(s=>s.trim()).filter(Boolean),msg=document.getElementById('prizeMsg');
   if(list.length<4||list.length>12){msg.textContent=`You have ${list.length} prizes. Use between 4 and 12 so the slices stay readable.`;return}
-  prizes=list;store.set('dw_prizes',JSON.stringify(prizes));draw();msg.textContent='Wheel updated.'};
-document.getElementById('resetPrizes').onclick=()=>{prizes=DEFAULTS.slice();ta.value=prizes.join('\n');store.set('dw_prizes',JSON.stringify(prizes));draw();document.getElementById('prizeMsg').textContent='Back to the default prizes.'};
+  prizes=list;store.set('dw_prizes_v2',JSON.stringify(prizes));draw();msg.textContent='Wheel updated.'};
+document.getElementById('resetPrizes').onclick=()=>{prizes=DEFAULTS.slice();ta.value=prizes.join('\n');store.set('dw_prizes_v2',JSON.stringify(prizes));draw();document.getElementById('prizeMsg').textContent='Back to the default prizes.'};
 document.getElementById('clearLog').onclick=()=>{log=[];store.set('dw_log','[]');renderLog();document.getElementById('clearMsg').textContent='Winners list cleared.'};
 const fxT=document.getElementById('fxToggle');let ambient=store.get('dw_fx')!=='off';fxT.checked=ambient;
 fxT.onchange=()=>{ambient=fxT.checked;store.set('dw_fx',ambient?'on':'off')};
